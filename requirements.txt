@@ -1,0 +1,27 @@
+# Core dependencies for data preprocessing and general utilities
+numpy==1.24.3          # Numerical operations (used in preprocessing)
+pillow==10.0.0         # Image processing (used with MSCOCO and TDIUC)
+pandas==2.0.3          # Data handling (used for JSON parsing)
+
+# Dependencies for Stable Diffusion (Text-to-Image)
+torch==2.0.1           # PyTorch core (specified with CUDA 11.8 support)
+torchvision==0.15.2    # PyTorch vision utilities (compatible with torch 2.0.1)
+diffusers==0.20.0      # Stable Diffusion library
+transformers==4.31.0   # Hugging Face transformers (used by diffusers)
+accelerate==0.21.0     # Optimization for model loading and inference
+
+# Placeholder for CogVideo (Text-to-Video; minimal as it's experimental)
+# No specific CogVideo package exists yet; relying on torch for now
+# Add CogVideo-specific packages when available from official sources
+
+# Web application dependencies (Flask backend)
+flask==2.3.2           # Flask web framework
+
+# AWS observability
+aws-xray-sdk==2.12.0   # AWS X-Ray for request tracing
+
+# Optional For fine-tuning Stable Diffusion (if you choose to implement)
+datasets==2.14.4       # Hugging Face datasets (for loading processed_coco)
+
+# Optional For mobile app interaction (not directly used in backend but ensures compatibility)
+requests==2.31.0       # HTTP requests (useful for testing endpoints locally)

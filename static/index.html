@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generative AI</title>
+    <style>
+        body { font-family: Arial; text-align: center; margin-top: 50px; }
+        input { width: 300px; padding: 10px; }
+        button { padding: 10px 20px; }
+        #resultImage, #resultVideo { max-width: 500px; margin-top: 20px; display: none; }
+    </style>
+</head>
+<body>
+    <h1>Text-to-Image & Video Generator</h1>
+    <form id="imageForm">
+        <input type="text" id="imagePrompt" placeholder="Enter text for image">
+        <button type="submit">Generate Image</button>
+    </form>
+    <img id="resultImage" src="">
+    <form id="videoForm" style="margin-top: 20px;">
+        <input type="text" id="videoPrompt" placeholder="Enter text for video">
+        <button type="submit">Generate Video</button>
+    </form>
+    <video id="resultVideo" controls></video>
+    <script>
+        async function generate(endpoint, promptId, resultId) {
+            const prompt = document.getElementById(promptId).value;
+            const response = await fetch(`http://localhost:5000/${endpoint}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt })
+            });
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const result = document.getElementById(resultId);
+                result.src = url;
+                result.style.display = "block";
+            } else {
+                alert("Error: " + (await response.json()).error);
+            }
+        }
+
+        document.getElementById("imageForm").onsubmit = (e) => {
+            e.preventDefault();
+            generate("generate_image", "imagePrompt", "resultImage");
+        };
+
+        document.getElementById("videoForm").onsubmit = (e) => {
+            e.preventDefault();
+            generate("generate_video", "videoPrompt", "resultVideo");
+        };
+    </script>
+</body>
+</html>

@@ -4,7 +4,7 @@ import shutil
 import subprocess
 
 # Paths
-TDIUC_JSON = "../tdiuc/tdiuc_annotations.json"
+TDIUC_JSON = "../tdiuc/Annotations/tdiuc_annotations.json"
 COCO_IMAGE_DIR = "../coco/train2014/"
 OUTPUT_DIR = "../processed_tdiuc/"
 os.makedirs(OUTPUT_DIR, exist_ok=True)

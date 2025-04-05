@@ -2,23 +2,30 @@ import json
 import os
 from PIL import Image
 
+# Paths
+COCO_ANNOTATIONS = "../coco/annotations/captions_train2014.json"
+COCO_IMAGE_DIR = "../coco/train2014/"
+OUTPUT_DIR = "../processed_coco/"
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
 # Load annotations
-with open('./data/coco/annotations/captions_train2014.json', 'r') as f:
-    coco_data = json.load(f)
+with open(COCO_ANNOTATIONS, 'r') as f:
+    data = json.load(f)
 
-# Extract image-caption pairs
-captions = [(ann['image_id'], ann['caption']) for ann in coco_data['annotations']]
-with open('coco_captions.txt', 'w') as f:
-    for img_id, caption in captions:
-        f.write(f"{img_id:012d}\t{caption}\n")
-"Annotation: Saves image IDs (padded to 12 digits) and captions to a text file."
-image_dir = './data/coco/train2014/'
-output_dir = './data/coco/train2014_resized/'
-os.makedirs(output_dir, exist_ok=True)
-
-for img_id, _ in captions:
-    img_path = os.path.join(image_dir, f"{img_id:012d}.jpg")
-    if os.path.exists(img_path):
-        img = Image.open(img_path).resize((256, 256))
-        img.save(os.path.join(output_dir, f"{img_id:012d}.jpg"))
-"Annotation: Resizes all training images to 256x256 for Stable Diffusion."
+# Process first 1000 captions (for demo; adjust as needed)
+for annotation in data["annotations"][:1000]:
+    image_id = annotation["image_id"]
+    caption = annotation["caption"]
+    image_path = os.path.join(COCO_IMAGE_DIR, f"COCO_train2014_{str(image_id).zfill(12)}.jpg")
+    if os.path.exists(image_path):
+        try:
+            img = Image.open(image_path)
+            output_image_path = os.path.join(OUTPUT_DIR, f"{image_id}.jpg")
+            img.save(output_image_path)
+            with open(os.path.join(OUTPUT_DIR, f"{image_id}.txt"), "w") as f:
+                f.write(caption)
+            print(f"Processed image {image_id}")
+        except Exception as e:
+            print(f"Error processing {image_id}: {e}")
+    else:
+        print(f"Image not found: {image_path}")
